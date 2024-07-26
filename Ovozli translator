@@ -1,0 +1,84 @@
+
+from tkinter import *
+from tkinter.ttk import Combobox
+from googletrans import Translator,LANGUAGES
+import pyttsx3
+tk = Tk()
+tk.title("Translator")
+tk['bg'] = 'yellow'
+tk['padx'] = 10
+tk['pady'] = 5
+
+
+translator = Translator(service_urls=['translate.googleapis.com'])
+tillar = list(LANGUAGES.values())
+def speech():
+    gap = pyttsx3.init()
+    gap.say(txt1.get(1.0,END))
+    gap.runAndWait()
+def speech2():
+    gap = pyttsx3.init()
+    gap.say(txt.get(1.0,END))
+    gap.runAndWait()
+def translate():
+    global combo,combo2
+    translate_from = cambo.get()
+    translate_to = cambo2.get()
+    txt.delete("1.0",END)
+
+
+
+    if translate_to == "choose Detect":
+        txt2.insert(1.0,"Tarjima qilinadigon tilni tanlang")
+        return
+    if translate_from == "Auto Detect":
+        translate_from = translator.detect(txt1)
+        translate_from = translate_from.lang
+
+    translation = translator.translate(txt1.get(1.0, END), dest=translate_to, src=translate_from)
+    txt.insert(1.0, translation.text)
+
+    
+
+def clear():
+    txt1.delete("1.0",END)
+    txt.delete("1.0",END)
+    
+    
+
+tillar = list(LANGUAGES.values())
+labal = Label(tk, text='BXRD Translator',bg = 'yellow',fg = 'black')
+labal.config(font = ('courier',24 ))
+labal.place(x=520, y=10)
+cambo = Combobox(tk, values=tillar)
+cambo.place(x=270,y=100)
+cambo.set("Auto Detect")
+cambo2 = Combobox(tk, values=tillar)
+cambo2.place(x=855,y=100)
+cambo2.set("choose Detect")
+label1 = Label(bg = 'yellow',padx = 30, pady = 60)
+label1.grid(row = 10, column = 10)
+txt1 = Text(tk,width=70,height=20)
+txt1.grid(row=100,column=270)
+txt = Text(tk,width=70,height=20)
+txt.grid(row=100,column=540,padx=10)
+
+button = Button(tk, text="Trenslate",command=translate,bg='light blue',height=2,width=15)
+button.grid(row=200, column=270,pady=10)
+
+
+button = Button(tk, text="Clear",command=clear,bg='light blue',height=2,width=15)
+button.grid(row=200, column=540,pady=10)
+
+button = Button(tk, text="Speech",command=speech,bg='red',fg = 'white')
+button.place(x=565, y=430)
+
+button = Button(tk, text="Speech",command=speech2,bg='red',fg = 'white')
+button.place(x=1138, y=430)
+
+
+
+
+tk.mainloop()
+
+
